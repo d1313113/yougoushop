@@ -1,0 +1,15 @@
+{
+	"description": "online shop",
+	"setting": {
+		"urlCheck": true,
+		"es6": false,
+		"postcss": false,
+		"minified": false,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"appid": "wx6c1201fa8716bdde",
+	"projectname": "shop",
+	"miniprogramRoot": "./dist",
+	"condition": {}
+}

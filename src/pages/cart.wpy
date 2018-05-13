@@ -1,0 +1,20 @@
+<style lang="less">
+</style>
+<template>
+  <view class="container">
+    购物车
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  export default class Cart extends wepy.page {
+    config = {
+      navigationBarTitleText: '购物车'
+    }
+    onLoad() {
+      console.log('onLoad')
+    }
+  }
+</script>
