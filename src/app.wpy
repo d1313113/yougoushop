@@ -1,5 +1,5 @@
 <style lang="less">
-page{
+page {
   background-color: #f4f4f4;
   font-size: 24rpx;
   color: #666;
@@ -8,6 +8,7 @@ page{
 
 <script>
 import wepy from 'wepy'
+import 'wepy-async-function'
 
 export default class extends wepy.app {
   config = {
@@ -15,7 +16,10 @@ export default class extends wepy.app {
       'pages/index',
       'pages/category',
       'pages/cart',
-      'pages/me'
+      'pages/me',
+      'pages/goods_list',
+      'pages/goods_detail',
+      'pages/orders'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -51,6 +55,10 @@ export default class extends wepy.app {
         }
       ]
     }
+  }
+  constructor() {
+    super()
+    this.use('promisify')
   }
 
   onLaunch() {
