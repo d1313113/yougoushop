@@ -2,7 +2,7 @@
  * @Author: Cumelmell
  * @Date: 2018-05-15 11:37:47
  * @Last Modified by: Cumelmell
- * @Last Modified time: 2018-05-15 20:34:50
+ * @Last Modified time: 2018-05-15 19:08:40
  */
 <style lang="less" scpoed>
 .search {
@@ -140,19 +140,17 @@
       <view class="fool-body">
         <!-- 左侧 -->
         <view class="fool-body-left">
-          <navigator url="{{item.product_list[0].navigator_url}}">
+          <navigator url="{{item.product_list[0].navigator_url}}"  wx:key="index" wx:for-item="secondItem" wx:for-index="secondIndex">
             <image src="{{item.product_list[0].image_src}}"></image>
           </navigator>
         </view>
         <!-- 右侧 -->
         <view class="fool-body-right">
-          <block wx:for="{{item.product_list}}" wx:key="index" wx:if="{{index>0}}">
-          <navigator url="{{item.navigator_url}}"
-          open-type="{{item.open_type}}"
+          <navigator url="{{secondItem.navigator_url}}" wx:for="{{foolRightArr[index]}}" wx:key="index" wx:for-item="secondItem"
+          open-type="{{secondItem.open_type}}"
           >
-            <image src="{{item.image_src}}" style="width:{{item.image_width}}rpx"></image>
+            <image src="{{secondItem.image_src}}" style="width:{{secondItem.image_width+'rpx'}}"></image>
           </navigator>
-          </block>
         </view>
       </view>
       <!-- 底部 -->
@@ -169,7 +167,7 @@
     </view>
 
     <!-- 返回顶部 -->
-    <view class="toTop" @tap="toTop">
+    <view class="toTop">
       <image src="/images/arrow_top@2x.png"></image>
       <view>顶部</view>
     </view>
@@ -186,15 +184,8 @@ export default class Index extends wepy.page {
     img: [[]],
     swiperArr: [],
     navArr: [],
-    foolArr: []
-  }
-  methods = {
-    toTop () {
-      wepy.pageScrollTo({
-        scrollTop: 0,
-        duration: 1000
-      })
-    }
+    foolArr: [],
+    foolRightArr: []
   }
   config = {
     navigationBarTitleText: '优购'
@@ -220,6 +211,14 @@ export default class Index extends wepy.page {
     api.getFool().then(res => {
       if (res.meta.status === 200) {
         this.foolArr = res.data
+        this.foolArr.forEach((item, i1) => {
+          this.foolRightArr[i1] = []
+          item.product_list.forEach((item2, i2) => {
+            if (i2 !== 0) {
+              this.foolRightArr[i1].push(item2)
+            }
+          })
+        })
         this.$apply()
       }
     })
