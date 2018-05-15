@@ -2,7 +2,7 @@
  * @Author: Cumelmell
  * @Date: 2018-05-15 11:37:47
  * @Last Modified by: Cumelmell
- * @Last Modified time: 2018-05-15 15:09:28
+ * @Last Modified time: 2018-05-15 16:13:25
  */
 <style lang="less" scpoed>
 .search {
@@ -192,47 +192,11 @@ export default class Index extends wepy.page {
     console.log('onLoad')
 
     // 获取轮播图图片
-    // wepy
-    //   .request({
-    //     url: 'https://itjustfun.cn/api/public/v1/home/swiperdata', // 开发者服务器接口地址",
-    //     method: 'GET',
-    //     dataType: 'json' // 如果设为json，会尝试对返回的数据做一次 JSON.parse
-    //     // success: res => {
-    //     //   if (res.statusCode === 200) {
-    //     //     this.imgUrls = res.data.data
-    //     //     this.$apply()
-    //     //   }
-    //     // }
-    //   })
-    //   .then(res => {
-    //     if (res.statusCode === 200) {
-    //       this.imgUrls = res.data.data
-    //       this.$apply()
-    //     }
-    //   })
     api.getHomeSwiper().then(res => {
       this.swiperArr = res.data
     })
 
     // 获取导航数据
-    // wepy
-    //   .request({
-    //     url: 'https://itjustfun.cn/api/public/v1/home/catitems', // 开发者服务器接口地址",
-    //     method: 'GET',
-    //     dataType: 'json' // 如果设为json，会尝试对返回的数据做一次 JSON.parse
-    //     // success: res => {
-    //     //   if (res.data.meta.status === 200) {
-    //     //     this.navArr = res.data.data
-    //     //     this.$apply()
-    //     //   }
-    //     // }
-    //   })
-    //   .then(res => {
-    //     if (res.data.meta.status === 200) {
-    //       this.navArr = res.data.data
-    //       this.$apply()
-    //     }
-    //   })
     api.getNav().then(res => {
       if (res.meta.status === 200) {
         this.navArr = res.data
@@ -241,42 +205,20 @@ export default class Index extends wepy.page {
     })
 
     // 获取楼层数据
-    wepy
-      .request({
-        url: 'https://itjustfun.cn/api/public/v1/home/floordata', // 开发者服务器接口地址",
-        method: 'GET',
-        dataType: 'json' // 如果设为json，会尝试对返回的数据做一次 JSON.parse
-        // success: res => {
-        //   // console.log(res)
-        //   if (res.data.meta.status === 200) {
-        //     this.foolArr = res.data.data
-        //     this.foolArr.forEach((item, i1) => {
-        //       this.foolRightArr[i1] = []
-        //       item.product_list.forEach((item2, i2) => {
-        //         if (i2 !== 0) {
-        //           this.foolRightArr[i1].push(item2)
-        //         }
-        //       })
-        //     })
-        //     this.$apply()
-        //   }
-        // }
-      })
-      .then(res => {
-        // console.log(res)
-        if (res.data.meta.status === 200) {
-          this.foolArr = res.data.data
-          this.foolArr.forEach((item, i1) => {
-            this.foolRightArr[i1] = []
-            item.product_list.forEach((item2, i2) => {
-              if (i2 !== 0) {
-                this.foolRightArr[i1].push(item2)
-              }
-            })
+    api.getFool().then(res => {
+      if (res.meta.status === 200) {
+        this.foolArr = res.data
+        this.foolArr.forEach((item, i1) => {
+          this.foolRightArr[i1] = []
+          item.product_list.forEach((item2, i2) => {
+            if (i2 !== 0) {
+              this.foolRightArr[i1].push(item2)
+            }
           })
-          this.$apply()
-        }
-      })
+        })
+        this.$apply()
+      }
+    })
   }
 }
 </script>
