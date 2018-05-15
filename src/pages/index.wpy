@@ -1,3 +1,9 @@
+/*
+ * @Author: Cumelmell
+ * @Date: 2018-05-15 11:37:47
+ * @Last Modified by: Cumelmell
+ * @Last Modified time: 2018-05-15 15:09:28
+ */
 <style lang="less" scpoed>
 .search {
   padding: 20rpx 16rpx;
@@ -105,7 +111,7 @@
 
     <!-- 轮播图 -->
     <swiper indicator-dots="true" autoplay="true" interval="3000" duration="1000" indicator-active-color="#fff" circular="true" indicator-color="#b1b4cf" class="swiper">
-      <block wx:for="{{imgUrls}}" wx:key="{{index}}">
+      <block wx:for="{{swiperArr}}" wx:key="{{index}}">
         <swiper-item>
           <navigator url="{{item.navigator_url}}" open-type="{{item.open_type}}">
           <image src="{{item.image_src}}" class="slide-image img" />
@@ -168,11 +174,13 @@
 </template>
 <script>
 import wepy from 'wepy'
+// 导入api
+import api from '../api/api'
 
 export default class Index extends wepy.page {
   data = {
     img: [[]],
-    imgUrls: [],
+    swiperArr: [],
     navArr: [],
     foolArr: [],
     foolRightArr: []
@@ -184,44 +192,53 @@ export default class Index extends wepy.page {
     console.log('onLoad')
 
     // 获取轮播图图片
-    wepy
-      .request({
-        url: 'https://itjustfun.cn/api/public/v1/home/swiperdata', // 开发者服务器接口地址",
-        method: 'GET',
-        dataType: 'json' // 如果设为json，会尝试对返回的数据做一次 JSON.parse
-        // success: res => {
-        //   if (res.statusCode === 200) {
-        //     this.imgUrls = res.data.data
-        //     this.$apply()
-        //   }
-        // }
-      })
-      .then(res => {
-        if (res.statusCode === 200) {
-          this.imgUrls = res.data.data
-          this.$apply()
-        }
-      })
+    // wepy
+    //   .request({
+    //     url: 'https://itjustfun.cn/api/public/v1/home/swiperdata', // 开发者服务器接口地址",
+    //     method: 'GET',
+    //     dataType: 'json' // 如果设为json，会尝试对返回的数据做一次 JSON.parse
+    //     // success: res => {
+    //     //   if (res.statusCode === 200) {
+    //     //     this.imgUrls = res.data.data
+    //     //     this.$apply()
+    //     //   }
+    //     // }
+    //   })
+    //   .then(res => {
+    //     if (res.statusCode === 200) {
+    //       this.imgUrls = res.data.data
+    //       this.$apply()
+    //     }
+    //   })
+    api.getHomeSwiper().then(res => {
+      this.swiperArr = res.data
+    })
 
     // 获取导航数据
-    wepy
-      .request({
-        url: 'https://itjustfun.cn/api/public/v1/home/catitems', // 开发者服务器接口地址",
-        method: 'GET',
-        dataType: 'json' // 如果设为json，会尝试对返回的数据做一次 JSON.parse
-        // success: res => {
-        //   if (res.data.meta.status === 200) {
-        //     this.navArr = res.data.data
-        //     this.$apply()
-        //   }
-        // }
-      })
-      .then(res => {
-        if (res.data.meta.status === 200) {
-          this.navArr = res.data.data
-          this.$apply()
-        }
-      })
+    // wepy
+    //   .request({
+    //     url: 'https://itjustfun.cn/api/public/v1/home/catitems', // 开发者服务器接口地址",
+    //     method: 'GET',
+    //     dataType: 'json' // 如果设为json，会尝试对返回的数据做一次 JSON.parse
+    //     // success: res => {
+    //     //   if (res.data.meta.status === 200) {
+    //     //     this.navArr = res.data.data
+    //     //     this.$apply()
+    //     //   }
+    //     // }
+    //   })
+    //   .then(res => {
+    //     if (res.data.meta.status === 200) {
+    //       this.navArr = res.data.data
+    //       this.$apply()
+    //     }
+    //   })
+    api.getNav().then(res => {
+      if (res.meta.status === 200) {
+        this.navArr = res.data
+        this.$apply()
+      }
+    })
 
     // 获取楼层数据
     wepy
