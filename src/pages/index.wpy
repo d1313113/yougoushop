@@ -2,7 +2,7 @@
  * @Author: Cumelmell
  * @Date: 2018-05-15 11:37:47
  * @Last Modified by: Cumelmell
- * @Last Modified time: 2018-05-15 20:34:50
+ * @Last Modified time: 2018-05-17 11:12:21
  */
 <style lang="less" scpoed>
 .search {
@@ -164,8 +164,10 @@
     </view>
 
     <!-- 没有更多 -->
-    <view class="nomore">
-      我是有底线的!
+    <view class="end-tips">
+      <view class="iconfont icon-xiao">
+        我是有底线的!
+      </view>
     </view>
 
     <!-- 返回顶部 -->

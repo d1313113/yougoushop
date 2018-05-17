@@ -1,10 +1,11 @@
 /*
  * @Author: Cumelmell
  * @Date: 2018-05-15 11:38:17
- * @Last Modified by:   Cumelmell
- * @Last Modified time: 2018-05-15 11:38:17
+ * @Last Modified by: Cumelmell
+ * @Last Modified time: 2018-05-17 11:11:56
  */
 <style lang="less">
+@import '/style/iconfont.wxss';
 page {
   background-color: #f4f4f4;
   font-size: 24rpx;
