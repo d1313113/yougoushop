@@ -1,4 +1,6 @@
 <style lang="less">
+/* 引入wxParse样式 */
+@import "../plugins/wxParse/wxParse.wxss";
 // 2.0 这里写样式
 .swiper,
 .swiper-img {
@@ -262,34 +264,28 @@
 
     <view class="tabs">
         <view class="tabs-head">
-            <view class="tabs-item">
-                图文详情
+            <view class="tabs-item  active">
+              图文详情
             </view>
-            <view class="tabs-item active">
+            <view class="tabs-item">
                 规格参数
             </view>
         </view>
         <view class="tabs-body">
-            <view class="tabs-content" style="display: none">
-                商品图文展示
-            </view>
             <view class="tabs-content">
-                <view class="param-item">
-                    <text class="note">商品名称</text>
-                    <text class="description">复古撞色运动外套男女情侣校服立领夹文字自动换行</text>
-                </view>
-                <view class="param-item">
-                    <text class="note">品牌</text>
-                    <text class="description">初语</text>
-                </view>
-                <view class="param-item">
-                    <text class="note">编号</text>
-                    <text class="description">BR1005</text>
-                </view>
-                <view class="param-item">
-                    <text class="note">颜色</text>
-                    <text class="description">黑色 / 白色 / 灰色</text>
-                </view>
+                商品图文展示
+                <!-- 引入模板 -->
+                <import src="/plugins/wxParse/wxParse.wxml"/>
+                <!-- 这里data中article为bindName -->
+                <template is="wxParse" data="{{wxParseData:article.nodes}}"/>
+            </view>
+            <view class="tabs-content" style="display: none">
+              <block wx:for="{{goodsDetail.attrs}}" wx:key="index">
+              <view class="param-item">
+                  <text class="note">{{item.attr_name}}</text>
+                  <text class="description">{{item.attr_vals}}</text>
+              </view>
+              </block>
             </view>
         </view>
     </view>
@@ -315,6 +311,8 @@
 import wepy from 'wepy'
 // 引入api
 import api from '../api/api'
+// 引入富文本插件
+import wxParse from '../plugins/wxParse/wxParse.js'
 // 首字母大写
 export default class GoodsDetail extends wepy.page {
   // 4.0 这里写JSON配置项
@@ -338,9 +336,20 @@ export default class GoodsDetail extends wepy.page {
   }
   onLoad() {
     console.log('onLoad')
-    api.getGoodsDetail({ data: { goods_id: 55578 } }).then(res => {
+    api.getGoodsDetail({ data: { goods_id: 17927 } }).then(res => {
       this.goodsDetail = res.data
       this.$apply()
+      var parseData = '<div>我是HTML代码</div>'
+      /**
+      * WxParse.wxParse(bindName , type, data, target,imagePadding)
+      * 1.bindName绑定的数据名(必填)
+      * 2.type可以为html或者md(必填)
+      * 3.data为传入的具体数据(必填)
+      * 4.target为Page对象,一般为this(必填)
+      * 5.imagePadding为当图片自适应是左右的单一padding(默认为0,可选)
+      */
+      var that = this
+      wxParse.wxParse('article', 'html', parseData, that, 5)
     })
   }
 }
