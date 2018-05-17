@@ -222,19 +222,19 @@
       interval="2500"
       autoplay="true"
       circular="true">
-      <block>
-        <swiper-item>
-          <image class="swiper-img" src="http://p6lmyfkof.bkt.clouddn.com/detail_banner@2x.png" />
+      <block wx:for="{{goodsDetail.pics}}" wx:key="index">
+        <swiper-item @tap="showPic({{item.pics_big_url}})">
+          <image class="swiper-img" src="{{item.pics_big}}" />
         </swiper-item>
       </block>
     </swiper>
     <view class="product-info">
         <view class="product-head">
-            <text class="price">￥248</text>
+            <text class="price">￥{{ goodsDetail.goods_price }}</text>
         </view>
         <view class="product-body">
             <view class="product-name">
-                春秋棒球服女嘻哈接头潮牌复古撞色运动外套男女情侣校服立领夹文字超出隐藏
+                {{ goodsDetail.goods_name }}
             </view>
             <view class="product-like">
                 <view class="iconfont icon-shoucang"></view>
@@ -324,13 +324,24 @@ export default class GoodsDetail extends wepy.page {
   data = {
     goodsDetail: null
   }
+  methods = {
+    showPic(pic) {
+      let picArr = []
+      this.goodsDetail.pics.forEach(item => {
+        picArr.push(item.pics_big_url)
+      })
+      wepy.previewImage({
+        current: pic, // 当前显示图片的http链接
+        urls: picArr // 需要预览的图片http链接列表
+      })
+    }
+  }
   onLoad() {
     console.log('onLoad')
-    api.getGoodsDetail({ data: { goods_id: 55578 } })
-      .then(res => {
-        this.goodsDetail = res.data
-        this.$apply()
-      })
+    api.getGoodsDetail({ data: { goods_id: 55578 } }).then(res => {
+      this.goodsDetail = res.data
+      this.$apply()
+    })
   }
 }
 </script>
