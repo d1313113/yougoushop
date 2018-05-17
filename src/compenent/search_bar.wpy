@@ -5,9 +5,9 @@
 }
 </style>
 <template>
-<view class="search">
+<navigator class="search" url="/pages/goods_list">
   搜索框
-</view>
+</navigator>
 </template>
 <script>
 import wepy from 'wepy'
