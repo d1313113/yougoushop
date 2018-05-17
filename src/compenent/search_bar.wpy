@@ -1,0 +1,17 @@
+<style lang="less" scoped>
+.search{
+  background-color: #ff004d;
+  padding: 20rpx 16rpx;
+}
+</style>
+<template>
+<view class="search">
+  搜索框
+</view>
+</template>
+<script>
+import wepy from 'wepy'
+export default class SearchBar extends wepy.component {
+
+}
+</script>
