@@ -264,22 +264,22 @@
 
     <view class="tabs">
         <view class="tabs-head">
-            <view class="tabs-item  active">
+            <view class="tabs-item  {{!tabIndex?'active':''}}" @tap="switchTabsClass({{ 0 }})">
               图文详情
             </view>
-            <view class="tabs-item">
+            <view class="tabs-item {{tabIndex?'active':''}}" @tap="switchTabsClass({{ 1 }})">
                 规格参数
             </view>
         </view>
         <view class="tabs-body">
-            <view class="tabs-content">
+            <view class="tabs-content" hidden="{{tabIndex}}">
                 商品图文展示
                 <!-- 引入模板 -->
                 <import src="/plugins/wxParse/wxParse.wxml"/>
                 <!-- 这里data中article为bindName -->
                 <template is="wxParse" data="{{wxParseData:article.nodes}}"/>
             </view>
-            <view class="tabs-content" style="display: none">
+            <view class="tabs-content" hidden="{{!tabIndex}}">
               <block wx:for="{{goodsDetail.attrs}}" wx:key="index">
               <view class="param-item">
                   <text class="note">{{item.attr_name}}</text>
@@ -320,9 +320,11 @@ export default class GoodsDetail extends wepy.page {
     navigationBarTitleText: '商品详情'
   }
   data = {
-    goodsDetail: null
+    goodsDetail: null,
+    tabIndex: 0
   }
   methods = {
+    // 点击显示大图
     showPic(pic) {
       let picArr = []
       this.goodsDetail.pics.forEach(item => {
@@ -332,6 +334,11 @@ export default class GoodsDetail extends wepy.page {
         current: pic, // 当前显示图片的http链接
         urls: picArr // 需要预览的图片http链接列表
       })
+    },
+    // 点击切换tab栏
+    switchTabsClass(index) {
+      // 让table栏的index变成点击的那个值
+      this.tabIndex = index
     }
   }
   onLoad() {
@@ -339,7 +346,7 @@ export default class GoodsDetail extends wepy.page {
     api.getGoodsDetail({ data: { goods_id: 17927 } }).then(res => {
       this.goodsDetail = res.data
       this.$apply()
-      var parseData = '<div>我是HTML代码</div>'
+      var parseData = this.goodsDetail.goods_introduce
       /**
       * WxParse.wxParse(bindName , type, data, target,imagePadding)
       * 1.bindName绑定的数据名(必填)
