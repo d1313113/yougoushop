@@ -2,7 +2,7 @@
  * @Author: Cumelmell
  * @Date: 2018-05-15 11:37:47
  * @Last Modified by: Cumelmell
- * @Last Modified time: 2018-05-18 08:40:15
+ * @Last Modified time: 2018-05-18 10:24:42
  */
 <style lang="less" scpoed>
 // .search {
@@ -204,8 +204,8 @@ export default class Index extends wepy.page {
   config = {
     navigationBarTitleText: '优购'
   }
-  onLoad() {
-    console.log('onLoad')
+  onLoad(options) {
+    console.log('onLoad', options)
 
     // 获取轮播图图片
     api.getHomeSwiper().then(res => {
