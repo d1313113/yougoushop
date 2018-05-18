@@ -208,7 +208,6 @@
 
 .wxParse-content {
   padding: 55rpx;
-
   .wxParse-a {
     display: none;
   }
@@ -339,6 +338,9 @@ export default class GoodsDetail extends wepy.page {
     switchTabsClass(index) {
       // 让table栏的index变成点击的那个值
       this.tabIndex = index
+    },
+    wxParseImgLoad() {
+
     }
   }
   onLoad() {
