@@ -359,24 +359,27 @@ export default class GoodsDetail extends wepy.page {
     },
     // 添加购物车操作
     addCartHandler() {
+      // 需要保存到本地存储的字段
       let keys = ['goods_id', 'goods_name', 'goods_price', 'goods_small_logo']
+      // 从data中取出需要的字段的数据
       let cartInfo = {}
       keys.forEach(item => {
         cartInfo[item] = this.goodsDetail[item]
       })
       // wepy.setStorageSync('goodsCartArr', cartInfo)
+      // 从本地存储中获取购物车数据,如果不存在给默认值[]
       let goodsCartArr = wepy.getStorageSync('goodsCartArr') || []
+      // 调用判断当前商品在购物车是否存在的方法
       let goodCurrentIndex = this._checkCartGoodsById(cartInfo.goods_id, goodsCartArr)
-      console.log(goodCurrentIndex)
       if (goodCurrentIndex === -1) {
         cartInfo.goods_number = 1
-        cartInfo.goods_checkStatus = true
+        cartInfo.selectStatus = true
         goodsCartArr.push(cartInfo)
       } else {
         goodsCartArr[goodCurrentIndex].goods_number++
       }
       wepy.setStorageSync('goodsCartArr', goodsCartArr)
-      wx.showToast({
+      wepy.showToast({
         title: '添加购物车成功',
         icon: 'success',
         duration: 2000,
