@@ -273,10 +273,14 @@ page {
     <view class="order-pay-head">实付金额：<text class="order-pay-total">￥0.01</text></view>
     <!-- <button open-type="getUserInfo" @getuserinfo="getUserInfoHandle" class="login-btn">点击登录后下单</button> -->
     <!-- 微信授权 -->
-    <button open-type="getUserInfo" @getuserinfo="getUserInfoHandle" class="login-btn">
-      点击登录后下单
-    </button>
-    <view class="order-pay-btn" @tap="orderPayHandle">微信支付</view>
+    <block wx:if="{{ !token }}">
+      <button open-type="getUserInfo" @getuserinfo="getUserInfoHandle" class="login-btn">
+        点击登录后下单
+      </button>
+    </block>
+    <block wx:else>
+      <view class="order-pay-btn" @tap="orderPayHandle">微信支付</view>
+    </block>
   </view>
 
 </template>
@@ -299,7 +303,8 @@ export default class CartOrder extends wepy.page {
   data = {
     addressPage: null,
     goodsCartArr: null,
-    totalPrice: 0
+    totalPrice: 0,
+    token: ''
   }
   components = {
     Address
@@ -312,29 +317,97 @@ export default class CartOrder extends wepy.page {
     getUserInfoHandle(event) {
       // 把用户数据存起来
       wepy.setStorageSync('userInfo', event.detail)
-      // 封装后台需要的参数
-      let toGettoken = {
-        encryptedData: event.detail.encryptedData,
-        iv: event.detail.iv,
-        rawData: JSON.stringify(event.detail.rawData),
-        signature: event.detail.signature
-      }
+
       // 获取code
       wepy.login().then(res => {
-        toGettoken.code = res.code
+        // 封装后台需要的参数
+        let toGettoken = {
+          encryptedData: event.detail.encryptedData,
+          iv: event.detail.iv,
+          rawData: event.detail.rawData,
+          signature: event.detail.signature,
+          code: res.code
+        }
+        this.getToken(toGettoken)
       })
-      this.getToken(toGettoken)
+    },
+    // 提交订单
+    orderPayHandle() {
+      /**
+       * 1.确定有收货地址
+       * 2.需要下单的商品
+       * 3.支付的同时,服务器其实是执行了创建订单的操作
+       */
+      // 判断是否有地址
+      if (!this.addressPage) {
+        wepy.showToast({
+          title: '请选择地址',
+          icon: 'none',
+          duration: 2000,
+          mask: true
+        })
+      } else {
+        // 3.order_detail:订单详情,字符串
+        let orderDetailArr = []
+        // 4.goods:商品详情,后台校验需要
+        let goodsArr = []
+        let keys = ['goods_id', 'goods_number', 'goods_price']
+        this.goodsCartArr.forEach(item => {
+          // 筛选出选中状态的商品
+          if (item.selectStatus) {
+            orderDetailArr.push(item)
+            // 4.goods的foreach
+            let obj = {}
+            keys.forEach(key => {
+              obj[key] = item[key]
+            })
+            // goods的for
+            // let obj = {}
+            // for (var i = 0; i < keys.length; i++) {
+            //   obj[keys[i]] = item[keys[i]]
+            // }
+            goodsArr.push(obj)
+          }
+        })
+        /**
+         * 1.order_price:商品价格
+         * 2.consignee_addr:完整地址
+         * 3.order_detail:订单详情,字符串
+         * 4.goods:商品详情,goods_id,goods_number,goods_price
+         */
+        let options = {
+          // 商品价格
+          order_price: this.totalPrice,
+          consignee_addr: this.addressPage.userAddressMerge,
+          order_detail: JSON.stringify(orderDetailArr),
+          goods: goodsArr
+        }
+        console.log(options)
+        // 发送创建订单请求
+        api.creatOrder({
+          method: 'POST',
+          data: options
+        }).then(res => {
+          console.log(res)
+        })
+      }
     }
   }
   getToken(option) {
     console.log(option)
     // 把参数发送出去,获取token
-    api.postGetToken({
-      method: 'POST',
-      data: option
-    }).then(res => {
-      console.log(res)
-    })
+    api
+      .postGetToken({
+        method: 'POST',
+        data: option
+      })
+      .then(res => {
+        console.log(res)
+        if (res.meta.status === 200) {
+          // 设置本地存储的token
+          wepy.setStorageSync('token', res.token)
+        }
+      })
   }
   computed = {
     goodsCartArr() {
@@ -352,7 +425,10 @@ export default class CartOrder extends wepy.page {
     }
   }
   onShow() {
+    // 获取购物车数据
     this.goodsCartArr = wepy.getStorageSync('goodsCartArr')
+    // 获取token
+    this.token = wepy.getStorageSync('token') || ''
   }
 }
 </script>
