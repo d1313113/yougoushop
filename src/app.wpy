@@ -2,7 +2,7 @@
  * @Author: Cumelmell
  * @Date: 2018-05-15 11:38:17
  * @Last Modified by: Cumelmell
- * @Last Modified time: 2018-05-17 11:11:56
+ * @Last Modified time: 2018-05-20 11:05:52
  */
 <style lang="less">
 @import '/style/iconfont.wxss';
@@ -23,6 +23,7 @@ export default class extends wepy.app {
       'pages/index',
       'pages/category',
       'pages/cart',
+      'pages/cart_order',
       'pages/me',
       'pages/goods_list',
       'pages/goods_detail',

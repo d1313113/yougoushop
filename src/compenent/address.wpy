@@ -1,0 +1,50 @@
+<style lang="less">
+</style>
+<template>
+<view class="address-wrap" @tap="getAddress">
+  <!-- 添加slot插槽 -->
+  <slot>这是收获地址组件</slot>
+</view>
+</template>
+<script>
+import wepy from 'wepy'
+
+export default class Address extends wepy.component {
+  // 创建组件通讯数据存储
+  props= {
+    userAddress: {
+      type: Object,
+      // 实现数据传递
+      twoWay: true
+    }
+  }
+  methods= {
+    getAddress() {
+      console.log('你点击了收获地址组件')
+      // 调用选择地址的api
+      wepy.chooseAddress().then(res => {
+        // 把地址赋值给props中的userAddress
+        this.userAddress = res
+        // 为了多页面都可以使用到地址,存进strage中
+        wepy.setStorageSync('address', this.userAddress)
+        this.$apply()
+      })
+    }
+  }
+  onLoad() {
+    // 进入页面获取本地存储中的地址数据
+    this.userAddress = wepy.getStorageSync('address') || null
+  }
+  computed= {
+    userAddress() {
+      // 当userAddress中有内容时,进行拼接字符串
+      if (this.userAddress) {
+        // 拼接字符串
+        let userAddressMerge = `${this.userAddress.provinceName}${this.userAddress.cityName}${this.userAddress.countyName}${this.userAddress.detailInfo}`
+        this.userAddress.userAddressMerge = userAddressMerge
+        return this.userAddress
+      }
+    }
+  }
+}
+</script>

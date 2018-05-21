@@ -2,7 +2,7 @@
  * @Author: Cumelmell
  * @Date: 2018-05-15 11:27:33
  * @Last Modified by: Cumelmell
- * @Last Modified time: 2018-05-17 15:10:15
+ * @Last Modified time: 2018-05-20 19:28:44
  */
 // 1.0.1引入封装的weRequse方法
 import wxRequset from '../utils/wxRequest'
@@ -25,10 +25,13 @@ const getFool = params => wxRequset('home/floordata', params).then(res => res.da
 // 获商品详情
 const getGoodsDetail = params => wxRequset('goods/detail', params).then(res => res.data)
 
+// 微信登录获取token
+const postGetToken = params => wxRequset('users/wxlogin', params).then(res => res.data)
 // 1.0.5把封装的API导出,这里是统一导出
 export default {
   getHomeSwiper,
   getNav,
   getFool,
-  getGoodsDetail
+  getGoodsDetail,
+  postGetToken
 }

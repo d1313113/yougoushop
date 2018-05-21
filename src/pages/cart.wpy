@@ -348,9 +348,9 @@
         <view class="total-foot">包含运费</view>
       </view>
     </view>
-    <view class="buy-button">
-      结算(0)
-    </view>
+    <navigator class="buy-button" url="/pages/cart_order">
+      结算({{ selectStatusCount }})
+    </navigator>
   </view>
 </template>
 
@@ -372,6 +372,10 @@ export default class Cart extends wepy.page {
   onShow() {
     console.log('onShow')
     this.goodsCartArr = wepy.getStorageSync('goodsCartArr') || []
+  }
+  onHide() {
+    console.log('onHide')
+    wepy.setStorageSync('goodsCartArr', this.goodsCartArr)
   }
   computed= {
     goodsCartArr() {
