@@ -384,7 +384,7 @@ export default class CartOrder extends wepy.page {
         }
         console.log(options)
         // 发送创建订单请求
-        api.creatOrder({
+        api.postCreatOrder({
           method: 'POST',
           data: options
         }).then(res => {

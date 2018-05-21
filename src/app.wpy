@@ -2,7 +2,7 @@
  * @Author: Cumelmell
  * @Date: 2018-05-15 11:38:17
  * @Last Modified by: Cumelmell
- * @Last Modified time: 2018-05-20 11:05:52
+ * @Last Modified time: 2018-05-21 12:02:22
  */
 <style lang="less">
 @import '/style/iconfont.wxss';
@@ -67,6 +67,24 @@ export default class extends wepy.app {
   constructor() {
     super()
     this.use('promisify')
+    // 拦截request请求
+    this.intercept('request', {
+      // 发出请求时的回调函数
+      config(config) {
+        // 对所有request请求中的OBJECT参数对象统一附加时间戳属性
+        config.timestamp = +new Date()
+        // 对所有的请求添token
+        // 获取本地token
+        let token = wepy.getStorageSync('token') || ''
+        if (token) {
+          // 如果有token就添加到header中
+          config.header.Authorization = token
+        }
+        console.log('config request: ', config)
+        // 必须返回OBJECT参数对象，否则无法发送请求到服务端
+        return config
+      }
+    })
   }
 
   onLaunch() {
