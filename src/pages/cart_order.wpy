@@ -382,17 +382,55 @@ export default class CartOrder extends wepy.page {
           order_detail: JSON.stringify(orderDetailArr),
           goods: goodsArr
         }
-        console.log(options)
-        // 发送创建订单请求
-        api.postCreatOrder({
-          method: 'POST',
-          data: options
-        }).then(res => {
-          console.log(res)
-        })
+        // console.log(options)
+        // 调用处理订单三步曲
+        this.doOrder(options)
       }
     }
   }
+  // 订单处理三步曲
+  doOrder(options) {
+    // 发送创建订单请求
+    api.postCreatOrder({
+      method: 'POST',
+      data: options
+    }).then(res => {
+      if (res.meta.status === 200) {
+        // 获取订单号
+        let orderNumber = res.data.order_number
+        // 支付订单
+        api.postCreatOrderPay({
+          method: 'POST',
+          data: {order_number: orderNumber}
+        }).then(res => {
+          if (res.meta.status === 200) {
+            // console.log(res)
+            // 调用微信支付api
+            wepy.requestPayment(res.data.wxorder).then(res => {
+              // console.log(res)
+              if (res.errMsg === 'requestPayment:ok') {
+                api.postCreatOrderchkOrder({
+                  method: 'POST',
+                  data: {order_number: orderNumber}
+                }).then(res => {
+                  if (res.meta.status === 200) {
+                    wepy.showToast({
+                      title: '支付成功',
+                      icon: 'success',
+                      duration: 3000,
+                      mask: true
+                    })
+                  }
+                })
+              }
+            })
+          }
+        }
+        )
+      }
+    })
+  }
+  // 获取token
   getToken(option) {
     console.log(option)
     // 把参数发送出去,获取token
@@ -405,7 +443,9 @@ export default class CartOrder extends wepy.page {
         console.log(res)
         if (res.meta.status === 200) {
           // 设置本地存储的token
-          wepy.setStorageSync('token', res.token)
+          wepy.setStorageSync('token', res.data.token)
+          this.token = res.data.token
+          this.$apply()
         }
       })
   }

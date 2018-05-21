@@ -2,7 +2,7 @@
  * @Author: Cumelmell
  * @Date: 2018-05-15 11:27:33
  * @Last Modified by: Cumelmell
- * @Last Modified time: 2018-05-21 11:34:34
+ * @Last Modified time: 2018-05-21 15:52:38
  */
 // 1.0.1引入封装的weRequse方法
 import wxRequset from '../utils/wxRequest'
@@ -34,6 +34,12 @@ const postGetToken = params => wxRequset('users/wxlogin', params).then(res => re
 // 创建订单
 const postCreatOrder = params => wxRequset('my/orders/create', params).then(res => res.data)
 
+// 订单支付
+const postCreatOrderPay = params => wxRequset('my/orders/req_unifiedorder', params).then(res => res.data)
+
+// 订单支付
+const postCreatOrderchkOrder = params => wxRequset('my/orders/chkOrder', params).then(res => res.data)
+
 // 1.0.5把封装的API导出,这里是统一导出
 export default {
   getHomeSwiper,
@@ -41,5 +47,8 @@ export default {
   getFool,
   getGoodsDetail,
   postGetToken,
-  postCreatOrder
+  // 以下的需要token
+  postCreatOrder,
+  postCreatOrderPay,
+  postCreatOrderchkOrder
 }

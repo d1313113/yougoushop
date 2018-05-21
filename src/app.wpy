@@ -2,7 +2,7 @@
  * @Author: Cumelmell
  * @Date: 2018-05-15 11:38:17
  * @Last Modified by: Cumelmell
- * @Last Modified time: 2018-05-21 12:02:22
+ * @Last Modified time: 2018-05-21 16:06:44
  */
 <style lang="less">
 @import '/style/iconfont.wxss';
@@ -80,7 +80,7 @@ export default class extends wepy.app {
           // 如果有token就添加到header中
           config.header.Authorization = token
         }
-        console.log('config request: ', config)
+        // console.log('config request: ', config)
         // 必须返回OBJECT参数对象，否则无法发送请求到服务端
         return config
       }
