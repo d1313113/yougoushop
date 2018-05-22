@@ -34,6 +34,7 @@ export default class Address extends wepy.component {
   onLoad() {
     // 进入页面获取本地存储中的地址数据
     this.userAddress = wepy.getStorageSync('address') || null
+    console.log('这是地址组件')
   }
   computed= {
     userAddress() {

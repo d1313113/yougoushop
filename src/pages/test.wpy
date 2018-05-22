@@ -2,7 +2,7 @@
  * @Author: Cumelmell
  * @Date: 2018-05-15 11:37:47
  * @Last Modified by: Cumelmell
- * @Last Modified time: 2018-05-22 20:32:40
+ * @Last Modified time: 2018-05-22 20:37:54
  */
 <style lang="less" scpoed>
 // .search {
@@ -180,7 +180,7 @@
 <script>
 import wepy from 'wepy'
 // 导入api
-import api from '../api/api'
+import api1 from '../api/api1'
 // 引入搜索框
 import SearchBar from '../compenent/search_bar'
 export default class Index extends wepy.page {
@@ -208,13 +208,13 @@ export default class Index extends wepy.page {
     console.log('onLoad', options)
 
     // 获取轮播图图片
-    api.getHomeSwiper().then(res => {
+    api1.getHomeSwiper().then(res => {
       this.swiperArr = res.data
       this.$apply()
     })
 
     // 获取导航数据
-    api.getNav().then(res => {
+    api1.getNav().then(res => {
       if (res.meta.status === 200) {
         this.navArr = res.data
         this.$apply()
@@ -222,7 +222,7 @@ export default class Index extends wepy.page {
     })
 
     // 获取楼层数据
-    api.getFool().then(res => {
+    api1.getFool().then(res => {
       if (res.meta.status === 200) {
         this.foolArr = res.data
         this.$apply()

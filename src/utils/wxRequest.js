@@ -2,7 +2,7 @@
  * @Author: Cumelmell
  * @Date: 2018-05-15 10:23:17
  * @Last Modified by: Cumelmell
- * @Last Modified time: 2018-05-15 10:29:38
+ * @Last Modified time: 2018-05-22 20:27:05
  */
 // 通过import把wepy导入到当前脚本中
 import wepy from 'wepy'

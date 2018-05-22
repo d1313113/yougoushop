@@ -2,7 +2,7 @@
  * @Author: Cumelmell
  * @Date: 2018-05-15 11:38:17
  * @Last Modified by: Cumelmell
- * @Last Modified time: 2018-05-21 16:06:44
+ * @Last Modified time: 2018-05-22 20:39:26
  */
 <style lang="less">
 @import '/style/iconfont.wxss';
@@ -27,7 +27,8 @@ export default class extends wepy.app {
       'pages/me',
       'pages/goods_list',
       'pages/goods_detail',
-      'pages/orders'
+      'pages/orders',
+      'pages/test'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -79,7 +80,7 @@ export default class extends wepy.app {
         if (token) {
           // 如果有token就添加到header中
           config.header.Authorization = token
-        }
+        };
         // console.log('config request: ', config)
         // 必须返回OBJECT参数对象，否则无法发送请求到服务端
         return config
